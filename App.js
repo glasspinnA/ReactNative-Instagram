@@ -1,22 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createStackNavigator, createAppContainer,createBottomTabNavigator } from 'react-navigation';
+import HomeScreen from './screens/HomeScreen';
+import LoginScreen from './screens/LoginScreen';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Hello World</Text>
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const RootStack = createBottomTabNavigator({
+  Home: {
+    screen: HomeScreen
   },
+  Login: {
+    screen: LoginScreen
+  }
 });
+
+const App = createAppContainer(RootStack);
+
+
+export default App;
