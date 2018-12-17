@@ -5,10 +5,19 @@ import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen';
 import LikeScreen from './screens/LikeScreen';
 
+
+const LikeStack = createStackNavigator({
+  Like: {screen: LikeScreen},
+});
+
+const HomeStack = createStackNavigator({
+  Home: {screen: HomeScreen},
+});
+
 const RootStack = createBottomTabNavigator(
   {
-  Home: {screen: HomeScreen},
-  Like: {screen: LikeScreen},
+  Home: {screen: HomeStack},
+  Like: {screen: LikeStack},
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -21,14 +30,9 @@ const RootStack = createBottomTabNavigator(
           iconName = `md-heart${focused ? '' : '-empty'}`;
         }
 
-        // You can return any component that you like here! We usually use an
-        // icon component from react-native-vector-icons
         return <Ionicons name={iconName} size={25} color={tintColor} />;
       },
     })}
 );
 
-const App = createAppContainer(RootStack);
-
-
-export default App;
+export default createAppContainer(RootStack);

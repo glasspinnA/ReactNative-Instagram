@@ -1,14 +1,22 @@
 import React, { Component } from "react";
-import {
-    View,
-    Text,
-    StyleSheet,
-    Button
-} from "react-native";
+import { View,Text,Button,Icon } from 'native-base'
+import CustomCard from './screens/customCard'
 
-class HomeScreen extends Component {
+class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: 'Home',
+    headerTitle: 'Instagram',
+    headerStyle: {
+      backgroundColor: '#f4511e',
+    },
+    headerTintColor: '#fff',
+    headerLeft: (
+      <Icon name='ios-camera' style={{paddingLeft:15}} />
+    ),
+    headerRight: (
+      <Button>
+        <Icon name='md-paper-plane' style={{paddingRight:15}}/>
+      </Button>
+    ),
   };
 
   render() {
@@ -20,8 +28,10 @@ class HomeScreen extends Component {
           onPress={() => this.props.navigation.navigate('Like')}
         />
       </View>
+      <
     );
   }
 }
+
 
 export default HomeScreen;
