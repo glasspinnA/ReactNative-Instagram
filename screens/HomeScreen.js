@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { View,Text,Button,Icon, Container,Content } from 'native-base'
+
 import CustomCard from './CustomCard';
+import StoriesTab from "./StoriesTab";
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -23,6 +25,7 @@ class HomeScreen extends React.Component {
     return (
       <Container>
         <Content>
+          <StoriesTab />
           <CustomCard/>
           <CustomCard/>
         </Content>
