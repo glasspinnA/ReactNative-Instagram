@@ -7,16 +7,14 @@ import StoriesTab from "./StoriesTab";
 class HomeScreen extends React.Component {
   static navigationOptions = {
     headerTitle: 'Instagram',
-    headerStyle: {
-      backgroundColor: '#f4511e',
-    },
-    headerTintColor: '#fff',
     headerLeft: (
-      <Icon name='ios-camera' style={{paddingLeft:15}} />
+      <Button transparent>
+        <Icon name='ios-camera' style={{paddingTop:10, paddingLeft:10, color:'black'}} />
+      </Button>
     ),
     headerRight: (
-      <Button>
-        <Icon name='md-paper-plane' style={{paddingRight:15}}/>
+      <Button transparent>
+        <Icon name='md-paper-plane' style={{paddingRight:15, color:'black'}}/>
       </Button>
     ),
   };

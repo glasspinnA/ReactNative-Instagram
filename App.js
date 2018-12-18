@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer,createBottomTabNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
+import { Icon } from 'react-native-elements'
 
 import HomeScreen from './screens/HomeScreen';
 import LikeScreen from './screens/LikeScreen';
@@ -35,7 +36,7 @@ const RootStack = createBottomTabNavigator(
         } else if (routeName === 'Like') {
           iconName = `md-heart${focused ? '' : '-empty'}`;
         } else if (routeName === 'Profile'){
-          iconName = 'user-circle'
+          iconName = 'md-home'
         }
 
         return <Ionicons name={iconName} size={25} color={tintColor} />;

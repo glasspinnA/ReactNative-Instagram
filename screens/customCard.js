@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View,Text,Image} from 'react-native';
+import {View,Text,Image, StyleSheet} from 'react-native';
 import {Card,CardItem,Thumbnail,Button,Icon,Body,Left,Right} from 'native-base';
 
 class CustomCard extends React.Component {
@@ -10,7 +10,7 @@ class CustomCard extends React.Component {
       <Card>
         <CardItem>
             <Left>
-              <Thumbnail source={{uri: 'https://i.chzbgr.com/full/7345954048/h7E2C65F9/'}} />
+              <Thumbnail source={{uri: 'https://facebook.github.io/react-native/img/showcase/facebook.png'}} style={[styles.posterPic]} />
               <Body>
                 <Text>Username</Text>
                 <Text note>Time and date</Text>
@@ -20,16 +20,16 @@ class CustomCard extends React.Component {
         <CardItem cardBody>
           <Image source={{uri: 'https://facebook.github.io/react-native/img/showcase/facebook.png'}} style={{height:200, width:null, flex:1}}/>
         </CardItem>
-        <CardItem style={{height:5}}>
+        <CardItem>
           <Left>
             <Button transparent>
-              <Icon name="md-heart-empty" style={{color:'black'}}></Icon>
+              <Icon name="md-heart-empty" style={[styles.cardButtons]}></Icon>
             </Button>
             <Button transparent>
-              <Icon name="md-chatboxes" style={{color:'black'}}></Icon>
+              <Icon name="md-chatboxes" style={[styles.cardButtons]}></Icon>
             </Button>
             <Button transparent>
-              <Icon name="md-paper-plane" style={{color:'black'}}></Icon>
+              <Icon name="md-paper-plane" style={[styles.cardButtons]}></Icon>
             </Button>
           </Left>
         </CardItem>
@@ -50,5 +50,17 @@ class CustomCard extends React.Component {
     );
   }
 }
+
+
+const styles = StyleSheet.create({
+  posterPic: {
+    marginLeft: -10,
+  },
+  cardButtons: {
+    paddingTop: 5,
+    fontSize: 30,
+    color: 'black',
+  },
+});
 
 export default CustomCard;
