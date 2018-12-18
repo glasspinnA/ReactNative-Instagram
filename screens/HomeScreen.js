@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { View,Text,Button,Icon } from 'native-base'
-import CustomCard from './screens/customCard'
+import { View,Text,Button,Icon, Container,Content } from 'native-base'
+import CustomCard from './CustomCard';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -21,14 +21,12 @@ class HomeScreen extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home Screen</Text>
-        <Button
-          title="Go to Details"
-          onPress={() => this.props.navigation.navigate('Like')}
-        />
-      </View>
-      <
+      <Container>
+        <Content>
+          <CustomCard/>
+          <CustomCard/>
+        </Content>
+      </Container>
     );
   }
 }
