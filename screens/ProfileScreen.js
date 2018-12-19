@@ -1,7 +1,18 @@
 import React, { PureComponent } from 'react';
-import {  View, Text, StyleSheet } from 'react-native';
+import {  View, Text, StyleSheet, Image,Dimensions  } from 'react-native';
 import { Container, Content, Thumbnail, Button,Icon} from 'native-base';
 import HeaderRow from './HeaderRow';
+
+
+var images = [
+    require('../assets/jonna2.jpg'),
+    require('../assets/jonna2.jpg'),
+    require('../assets/jonna2.jpg'),
+    require('../assets/jonna2.jpg'),
+    require('../assets/jonna2.jpg'),
+    require('../assets/jonna2.jpg'),
+    require('../assets/jonna2.jpg'),
+]
 
 class ProfileScreen extends PureComponent {
 
@@ -25,21 +36,32 @@ class ProfileScreen extends PureComponent {
         })
       }
 
+    renderPageOne = () => {
+        const deviceWidth = Dimensions.get('window').width
+        return images.map((image, index) => {
+            return(
+                <View key={index} style={[ {width: deviceWidth / 3}, {height: deviceWidth / 3} ]}>
+                    <Image style={{ flex: 1, width:undefined, height: undefined}} source={image}   />
+                                                             </View>
+            )
+        })
+    }
+
       renderSection = () =>{ 
-          if(this.state.activeIndex == 0 ){
-            return (
-                <View>
-                    <Text>First section</Text>
-                </View>
-            )
-          }else if(this.state.activeIndex == 1){
-            return (
-                <View>
-                    <Text>Second section</Text>
-                </View>
-            )
-          }
-         
+        switch(this.state.activeIndex){
+            case 0:
+                return (
+                    <View style={{flexDirection: 'row', flexWrap:'wrap'}}>
+                        {this.renderPageOne()}
+                    </View>
+                )
+            case 1:
+                return (
+                    <View>
+                        <Text>Second section</Text>
+                    </View>
+                )
+        }
       }
 
   render() {
