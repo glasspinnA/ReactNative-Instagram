@@ -1,14 +1,30 @@
-import React, { Component } from "react";
+import React, { Alert, Component } from "react";
 import { View,Text,Button,Icon, Container,Content } from 'native-base'
 
 import CustomCard from './CustomCard';
 import StoriesTab from "./StoriesTab";
 
+import firebase from 'firebase'
+
+
+const config = {
+  apiKey: "AIzaSyAXsRxyvpSGxXY9nv_ZvJYVvBKbCZQFFbM",
+  authDomain: "instagram-react-f8775.firebaseapp.com",
+  databaseURL: "https://instagram-react-f8775.firebaseio.com",
+  projectId: "instagram-react-f8775",
+  storageBucket: "instagram-react-f8775.appspot.com",
+  messagingSenderId: "108838635737"
+};
+
+firebase.initializeApp(config)
+
+
 class HomeScreen extends React.Component {
-  static navigationOptions = {
-    headerTitle: 'Instagram',
+  static navigationOptions = ({navigation}) => {
+    return{
+      headerTitle: 'Instagram',
     headerLeft: (
-      <Button transparent>
+      <Button transparent onPress={navigation.getParam('increaseCount')}>
         <Icon name='ios-camera' style={{paddingTop:10, paddingLeft:10, color:'black'}} />
       </Button>
     ),
@@ -18,6 +34,27 @@ class HomeScreen extends React.Component {
       </Button>
     ),
   };
+    }
+    
+
+
+    componentWillMount() {
+      this.props.navigation.setParams({ increaseCount: this._increaseCount });
+    }
+  
+    state = {
+      count: 0,
+    };
+  
+    _increaseCount = () => {
+      alert("JE")
+      const itemsRef = firebase.database().ref('items');
+      const item = {
+        title: "this.state.currentItem",
+        user: "this.state.username"
+      }
+      itemsRef.push(item)
+    };
 
   render() {
     return (

@@ -22,9 +22,9 @@ const ProfileStack = createStackNavigator({
 
 const RootStack = createBottomTabNavigator(
   {
-  Home: {screen: ProfileStack},
+  Home: {screen: HomeStack},
   Like: {screen: LikeStack},
-  Profile: {screen: HomeStack}
+  Profile: {screen: ProfileStack}
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
