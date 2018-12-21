@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import {Button} from 'native-base'
 
-import fire from '../src/fire'
+import fire from '../../src/fire'
 
 class SignInScreen extends Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class SignInScreen extends Component {
     fire
     .auth()
     .createUserWithEmailAndPassword("jonna@gmail.com","jonna123")
-    .then(user => this.props.navigation.navigate('Home'))
+    .then(user => this.props.navigation.navigate('HomeFeed'))
     .catch(error => this.setState({ errorMessage: error.message }))
   }
 

@@ -7,7 +7,7 @@ class LoadingScreen extends Component {
 
     componentDidMount(){
         fire.auth().onAuthStateChanged(user => {
-            this.props.navigation.navigate(user ? 'Home' : 'SignUp')
+            this.props.navigation.navigate(user ? 'HomeFeed' : 'SignUp')
         })
     }
 

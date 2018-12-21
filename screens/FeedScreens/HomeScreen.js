@@ -1,9 +1,9 @@
 import React, { Alert, Component } from "react";
 import { View,Text,Button,Icon, Container,Content } from 'native-base'
 
-import CustomCard from './CustomCard';
-import StoriesTab from "./StoriesTab";
-import fire from "../src/fire";
+import CustomCard from '../CustomCard';
+import StoriesTab from "../StoriesTab";
+import fire from "../../src/fire";
 
 class HomeScreen extends React.Component {
   
