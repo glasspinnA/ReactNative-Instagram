@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 
+/*
 import firebase from 'firebase'
 //import Post from '../src/custom_objects/post'
 
@@ -20,22 +21,20 @@ const config = {
 };
 
 firebase.initializeApp(config)
-
+*/
 class LikeScreen extends Component {
-  constructor() {
-    super();
-    this.getFromFirebase()                   
+  
+
+  componentDidMount(){
+    this.getFromFirebase()
   }
 
   getFromFirebase(){
-    var ref = firebase.database().ref('posts/-LU7M8f5YtlL2H00YA5P')
+    var ref = firebase.database().ref('posts')
     ref.on("value", function(snapshot){
-      // Contains all data from Firebase
-      var data = snapshot.val();
-      // Has customer name
-      var userId = data.userId;
+      let responseArray = snapshot.val();
       
-      console.log(userId);
+      console.log(responseArray);
       
 
       });

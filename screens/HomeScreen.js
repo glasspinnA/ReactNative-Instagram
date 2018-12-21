@@ -3,55 +3,86 @@ import { View,Text,Button,Icon, Container,Content } from 'native-base'
 
 import CustomCard from './CustomCard';
 import StoriesTab from "./StoriesTab";
+import firebase from 'firebase'
 
 
+const config = {
+  apiKey: "AIzaSyAXsRxyvpSGxXY9nv_ZvJYVvBKbCZQFFbM",
+  authDomain: "instagram-react-f8775.firebaseapp.com",
+  databaseURL: "https://instagram-react-f8775.firebaseio.com",
+  projectId: "instagram-react-f8775",
+  storageBucket: "instagram-react-f8775.appspot.com",
+  messagingSenderId: "108838635737"
+};
+
+firebase.initializeApp(config)
 
 class HomeScreen extends React.Component {
-  static navigationOptions = ({navigation}) => {
+  
+  constructor(props){
+    super(props)
+
+    this.state = {
+      statusArray: [],
+    }
+
+  }
+
+  componentDidMount(){
+    this.fetchPostsFromDB()
+  }
+
+  static navigationOptions = () => {
     return{
       headerTitle: 'Instagram',
-    headerLeft: (
-      <Button transparent onPress={navigation.getParam('increaseCount')}>
-        <Icon name='ios-camera' style={{paddingTop:10, paddingLeft:10, color:'black'}} />
-      </Button>
-    ),
-    headerRight: (
-      <Button transparent>
-        <Icon name='md-paper-plane' style={{paddingRight:15, color:'black'}}/>
-      </Button>
-    ),
-  };
-    }
-    
+      headerLeft: (
+        <Button transparent>
+          <Icon name='ios-camera' style={{paddingTop:10, paddingLeft:10, color:'black'}} />
+        </Button>
+      ),
+      headerRight: (
+        <Button transparent>
+          <Icon name='md-paper-plane' style={{paddingRight:15, color:'black'}}/>
+        </Button>
+      ),
+    };  
+  }
 
+  fetchPostsFromDB = () =>{
+    let ref = firebase.database().ref('posts')
+    ref.once('value',snapshot =>{
+      let statusItems = snapshot.val();
+      let newStatusArray = [];
 
-    componentWillMount() {
-      this.props.navigation.setParams({ increaseCount: this._increaseCount });
-    }
-  
-    state = {
-      count: 0,
-    };
-  
-    /*
-    _increaseCount = () => {
-      alert("JE")
-      const itemsRef = firebase.database().ref('items');
-      const item = {
-        title: "this.state.currentItem",
-        user: "this.state.username"
+      for (let item in statusItems) {
+        newStatusArray.push({
+          id: item,
+          title: statusItems[item].userId
+        });
       }
-      itemsRef.push(item)
-    };
-    */
+
+      this.setState({
+        statusArray: newStatusArray
+      })
+    })
+  }
+
+
+  renderPosts = () => {
+    return this.state.statusArray.map((value,index) => {
+      return(        
+        <CustomCard key={index} testMessage={value.id}/>
+      )        
+    })
+  }
+    
 
   render() {
     return (
-      <Container>
+      <Container>        
         <Content>
           <StoriesTab />
-          <CustomCard/>
-          <CustomCard/>
+            {this.renderPosts()}            
         </Content>
       </Container>
     );
