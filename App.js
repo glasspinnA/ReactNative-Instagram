@@ -1,47 +1,26 @@
 import React from 'react';
-import { createStackNavigator, createAppContainer,createBottomTabNavigator } from 'react-navigation';
-import { Ionicons } from '@expo/vector-icons';
-import { Icon } from 'react-native-elements'
+import { createStackNavigator, createAppContainer,createBottomTabNavigator, createSwitchNavigator} from 'react-navigation';
 
-import HomeScreen from './screens/HomeScreen';
-import LikeScreen from './screens/LikeScreen';
-import ProfileScreen from './screens/ProfileScreen';
+import Container from './screens/Container'
+import LoadingScreen from './screens/LoadingScreen'
+import SignUpScreen from './screens/SignUpScreen'
+import LoginScreen from './screens/LoginScreen'
+
+const LoadingStack = createStackNavigator({ Load:LoadingScreen });
+//const HomeStack = createStackNavigator({ Home: HomeScreen, Other: OtherScreen });
+const ContainerStack = createStackNavigator({ Home: Container});
+const SignUpStack = createStackNavigator({ SignUp: SignUpScreen, Login: LoginScreen });
+const LogInStack = createStackNavigator({ Login: LoginScreen  });
 
 
-const LikeStack = createStackNavigator({
-  Like: {screen: LikeScreen},
-});
-
-const HomeStack = createStackNavigator({
-  Home: {screen: HomeScreen},
-});
-
-const ProfileStack = createStackNavigator({
-  Profile: {screen: ProfileScreen},
-});
-
-const RootStack = createBottomTabNavigator(
+export default createAppContainer(createSwitchNavigator(
   {
-  Home: {screen: HomeStack},
-  Like: {screen: LikeStack},
-  Profile: {screen: ProfileStack}
+    AuthLoading: LoadingStack,
+    Home: ContainerStack,
+    SignUp: SignUpStack,
+    Login: LogInStack
   },
   {
-    defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused, tintColor }) => {
-        const { routeName } = navigation.state;
-        let iconName;
-        if (routeName === 'Home') {
-          iconName = 'md-home'
-        } else if (routeName === 'Like') {
-          iconName = `md-heart${focused ? '' : '-empty'}`;
-        } else if (routeName === 'Profile'){
-          iconName = 'md-home'
-        }
-
-        return <Ionicons name={iconName} size={25} color={tintColor} />;
-      },
-    })}
-);
-
-export default createAppContainer(RootStack);
+    initialRouteName: 'AuthLoading',
+  }
+));

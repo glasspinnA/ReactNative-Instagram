@@ -12,7 +12,7 @@ class CustomCard extends React.Component {
             <Left>
               <Thumbnail source={{uri: 'https://facebook.github.io/react-native/img/showcase/facebook.png'}} style={[styles.posterPic]} />
               <Body>
-                <Text>{this.props.testMessage}</Text>
+                <Text>{this.props.username}</Text>
                 <Text note>Time and date</Text>
               </Body>
             </Left>

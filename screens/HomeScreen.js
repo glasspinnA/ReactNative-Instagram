@@ -3,19 +3,7 @@ import { View,Text,Button,Icon, Container,Content } from 'native-base'
 
 import CustomCard from './CustomCard';
 import StoriesTab from "./StoriesTab";
-import firebase from 'firebase'
-
-
-const config = {
-  apiKey: "AIzaSyAXsRxyvpSGxXY9nv_ZvJYVvBKbCZQFFbM",
-  authDomain: "instagram-react-f8775.firebaseapp.com",
-  databaseURL: "https://instagram-react-f8775.firebaseio.com",
-  projectId: "instagram-react-f8775",
-  storageBucket: "instagram-react-f8775.appspot.com",
-  messagingSenderId: "108838635737"
-};
-
-firebase.initializeApp(config)
+import fire from "../src/fire";
 
 class HomeScreen extends React.Component {
   
@@ -48,8 +36,11 @@ class HomeScreen extends React.Component {
     };  
   }
 
+  /*
+  * Method for fetching status posts from database
+  */
   fetchPostsFromDB = () =>{
-    let ref = firebase.database().ref('posts')
+    let ref = fire.database().ref('posts')
     ref.once('value',snapshot =>{
       let statusItems = snapshot.val();
       let newStatusArray = [];
@@ -59,7 +50,7 @@ class HomeScreen extends React.Component {
           id: item,
           title: statusItems[item].userId
         });
-      }
+      } 
 
       this.setState({
         statusArray: newStatusArray
@@ -68,10 +59,13 @@ class HomeScreen extends React.Component {
   }
 
 
+  /*
+  * Method for rendering each fetched post
+  */
   renderPosts = () => {
     return this.state.statusArray.map((value,index) => {
       return(        
-        <CustomCard key={index} testMessage={value.id}/>
+        <CustomCard key={index} username={value.id}/>
       )        
     })
   }
