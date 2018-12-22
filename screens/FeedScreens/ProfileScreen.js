@@ -1,17 +1,17 @@
 import React, { PureComponent } from 'react';
 import {  View, Text, StyleSheet, Image,Dimensions  } from 'react-native';
 import { Container, Content, Thumbnail, Button,Icon} from 'native-base';
-import HeaderRow from './HeaderRow';
 
 
 var images = [
-    require('../assets/jonna2.jpg'),
-    require('../assets/jonna2.jpg'),
-    require('../assets/jonna2.jpg'),
-    require('../assets/jonna2.jpg'),
-    require('../assets/jonna2.jpg'),
-    require('../assets/jonna2.jpg'),
-    require('../assets/jonna2.jpg'),
+    require('../../assets/jonna2.jpg'),
+    require('../../assets/jonna2.jpg'),
+    require('../../assets/jonna2.jpg'),
+    require('../../assets/jonna2.jpg'),
+    require('../../assets/jonna2.jpg'),
+    require('../../assets/jonna2.jpg'),
+    require('../../assets/jonna2.jpg'),
+
 ]
 
 class ProfileScreen extends PureComponent {

@@ -5,9 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 import LoadingScreen from './screens/LoadingScreen'
 import SignUpScreen from './screens/AuthStack/SignUpScreen'
 import LoginScreen from './screens/AuthStack/LoginScreen'
-import HomeScreen from './screens/FeeedScreens/HomeScreen'
-import LikeScreen from './screens/FeeedScreens/LikeScreen'
-import ProfileScreen from './screens/FeeedScreens/ProfileScreen'
+import HomeScreen from './screens/FeedScreens/HomeScreen'
+import LikeScreen from './screens/FeedScreens/LikeScreen'
+import ProfileScreen from './screens/FeedScreens/ProfileScreen'
 
 const AuthProcessStack = createStackNavigator({
   SignUp: SignUpScreen,
