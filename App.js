@@ -3,14 +3,14 @@ import { createStackNavigator, createAppContainer,createBottomTabNavigator, crea
 import { Ionicons } from '@expo/vector-icons';
 
 import LoadingScreen from './screens/LoadingScreen'
-import SignUpScreen from './screens/AuthStack/SignUpScreen'
+import LoginScreen from './screens/AuthStack/LoginScreen'
 import RegisterScreen from './screens/AuthStack/RegisterScreen'
 import HomeScreen from './screens/FeedScreens/HomeScreen'
 import LikeScreen from './screens/FeedScreens/LikeScreen'
 import ProfileScreen from './screens/FeedScreens/ProfileScreen'
 
 const AuthProcessStack = createStackNavigator({
-  SignUp: SignUpScreen,
+  Login: LoginScreen,
   Register: RegisterScreen
 })
 

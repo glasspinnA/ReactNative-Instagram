@@ -61,7 +61,6 @@ export default class LoginScreen extends Component {
     firebase.database().ref('users/' + userId).set({
       uid: userId, 
       email: this.state.email,
-      password: this.state.password,
       imageUrl: imageUri
     });
 

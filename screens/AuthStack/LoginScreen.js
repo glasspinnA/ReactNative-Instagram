@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {Button, Header, Body, Container, Content, Input, Item,Form} from 'native-base'
-import {ImagePicker, FileSystem} from 'expo'
 import firebase from '../../src/fire'
-import uuid from 'uuid';
-
-import { firstFromTime } from 'uuid-js';
 
 class SignInScreen extends Component {
 
+  constructor(props){
+    super(props)
+
+    this.state = {
+      email: '',
+      password: '',
+    }
+  }
   
   static navigationOptions = () => {
     return{
@@ -17,7 +21,18 @@ class SignInScreen extends Component {
   }
 
   login = () =>{
-    alert("Login")
+    let userEmail = this.state.email
+    let userPassword = this.state.password
+
+    if (userEmail != '' && userPassword != ''){
+      firebase.auth().signInWithEmailAndPassword(userEmail,userPassword)
+      .catch((error) => {
+        alert(error);
+      })
+    }else{
+      alert("Email or password is empty")
+    }
+  
   }
 
   render() {
@@ -31,23 +46,23 @@ class SignInScreen extends Component {
               <View style={styles.box}> 
                 <Form>
                   <Item>
-                    <Input placeholder="Username" />
+                    <Input placeholder="Email" onChangeText={(emailInput) => this.setState({email: emailInput})} />
                   </Item>
                   <Item>
-                    <Input placeholder="Password" />
+                    <Input placeholder="Password" onChangeText={(passwordInput) => this.setState({password: passwordInput})} />
                   </Item>
                 </Form>
               </View>
               <View style={styles.box}> 
                 <Body>
-                  <Button borderd dark onPress={this.login}>
+                  <Button bordered dark onPress={this.login}>
                     <Text>Sign Up</Text>
                   </Button>
                 </Body>
               </View>
               <View style={styles.box}> 
                 <Body>
-                  <Button bordered  dark style={{padding:10}} onPress={() => this.props.navigation.navigate('Login')}>
+                  <Button bordered  dark style={{padding:10}} onPress={() => this.props.navigation.navigate('Register')}>
                     <Text> Already have an account? </Text>
                   </Button>
                 </Body>
