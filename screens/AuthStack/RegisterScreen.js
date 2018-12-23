@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import {Button, Header, Body, Container, Content, Input, Item,Form} from 'native-base'
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import {Button, Header, Body, Container, Content, Input, Item,Form, Thumbnail, Label} from 'native-base'
 import {ImagePicker} from 'expo'
 import firebase from '../../src/fire'
 
 export default class LoginScreen extends Component {
+  /* 
+  * TODO: Fix layout
+  */
+
+  static navigationOptions = {
+    title: 'Create a user',
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -75,7 +83,7 @@ export default class LoginScreen extends Component {
 
     this.setState({
       selectedPhoto: pickerResult,
-      isPhotoSelected: true
+      isPhotoSelected: true,
     })
   };
 
@@ -84,25 +92,29 @@ export default class LoginScreen extends Component {
     return (
     <Container>
       <View style={styles.container}>
-        <View style={styles.box}>
-          <Text style={{textAlignVertical: "center",textAlign: "center",}}>Create your profile</Text>
+        <View style={[styles.box, styles.imageBox]}>
+            <TouchableWithoutFeedback onPress={this._pickImage}>
+              <View>
+                <View style={{position:'relative', marginTop:50}}>
+                  <Text style={{textAlignVertical: "center",textAlign: "center"}}>Select Photos</Text>
+                </View>
+                <Thumbnail large source = {{uri:this.state.selectedPhoto.uri}}/>  
+              </View>
+            </TouchableWithoutFeedback>
         </View>
         <View style={styles.box}> 
           <Form>
-            <Button onPress={this._pickImage}>
-              <Text>Select a photo</Text>
-            </Button>
-            <Item>
+            <Item rounded style={{marginBottom:30}}>
               <Input placeholder="Username" onChangeText={(emailInput) => this.setState({email: emailInput})} />
             </Item>
-            <Item>
-              <Input placeholder="Password" onChangeText={(passwordInput) => this.setState({password: passwordInput})} />
+            <Item rounded>
+              <Input placeholder="Password" secureTextEntry={true} onChangeText={(passwordInput) => this.setState({password: passwordInput})} />
             </Item>
           </Form>
         </View>
         <View style={styles.box}> 
           <Body>
-            <Button onPress={this.createUser}>
+            <Button bordered dark onPress={this.createUser} style={{padding:30}}>
               <Text>Sign Up</Text>
             </Button>
           </Body>
@@ -119,6 +131,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'center',
+  },
+  imageBox:{
+    width:120,
+    height:120,
+    borderRadius: 120/2,
+    borderWidth: 1,
+    borderColor: 'black',
   },
   box:{ 
     width: '90%',
