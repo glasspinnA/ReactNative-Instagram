@@ -3,7 +3,7 @@ import { View,Text,Button,Icon, Container,Content } from 'native-base'
 
 import CustomCard from '../CustomCard';
 import StoriesTab from "../StoriesTab";
-import fire from "../../src/fire";
+import firebase from "../../src/fire";
 
 class HomeScreen extends React.Component {
   
@@ -18,13 +18,16 @@ class HomeScreen extends React.Component {
 
   componentDidMount(){
     this.fetchPostsFromDB()
+    this.props.navigation.setParams({ logout: this._logout });
   }
 
-  static navigationOptions = () => {
+  static navigationOptions = ({navigation}) => {
+    const { params = {} } = navigation.state;
+
     return{
       headerTitle: 'Instagram',
       headerLeft: (
-        <Button transparent>
+        <Button transparent onPress={() => params.logout()}>
           <Icon name='ios-camera' style={{paddingTop:10, paddingLeft:10, color:'black'}} />
         </Button>
       ),
@@ -36,11 +39,20 @@ class HomeScreen extends React.Component {
     };  
   }
 
+  _logout = () => {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if(user){
+        firebase.auth().signOut()
+        alert("Log out")
+      }
+    })
+  }
+
   /*
   * Method for fetching status posts from database
   */
   fetchPostsFromDB = () =>{
-    let ref = fire.database().ref('posts')
+    let ref = firebase.database().ref('posts')
     ref.once('value',snapshot =>{
       let statusItems = snapshot.val();
       let newStatusArray = [];
