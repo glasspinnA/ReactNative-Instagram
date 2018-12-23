@@ -58,18 +58,14 @@ class SignInScreen extends Component {
                   </Form>
                 </View>
                 <View style={styles.box}> 
-                  <Body>
                     <Button rounded light onPress={this.login} style={styles.buttonStyle}>
                       <Text>Sign Up</Text>
                     </Button>
-                  </Body>
                 </View>
                 <View style={styles.box}> 
-                  <Body>
                     <Button rounded light style={styles.buttonStyle} onPress={() => this.props.navigation.navigate('Register')}>
                       <Text> Already have an account? </Text>
                     </Button>
-                  </Body>
                 </View>
               </View>
               

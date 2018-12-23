@@ -9,6 +9,8 @@ import HomeScreen from './screens/FeedScreens/HomeScreen'
 import LikeScreen from './screens/FeedScreens/LikeScreen'
 import ProfileScreen from './screens/FeedScreens/ProfileScreen'
 
+import PostTabScreen from './screens/FeedScreens/PostTabScreen'
+
 const AuthProcessStack = createStackNavigator({
   Login: LoginScreen,
   Register: RegisterScreen
@@ -26,11 +28,17 @@ const ProfileStack = createStackNavigator({
   Profile: {screen: ProfileScreen},
 });
 
+
+const PostTabStack = createStackNavigator({
+  PostTab: {screen: PostTabScreen},
+});
+
 const TabStack = createBottomTabNavigator(
   {
+    PostTab:{screen: PostTabStack},
   Home: {screen: HomeStack},
   Like: {screen: LikeStack},
-  Profile: {screen: ProfileStack}
+  Profile: {screen: ProfileStack},
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -54,7 +62,7 @@ export default createAppContainer(createSwitchNavigator(
   {
     AuthLoading: LoadingScreen,
     AuthRoute: AuthProcessStack,
-    HomeFeed: TabStack 
+    Tabs: TabStack 
   },
   {
     initialRouteName: 'AuthLoading',
