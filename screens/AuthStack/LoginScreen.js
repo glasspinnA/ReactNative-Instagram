@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {Button, Header, Body, Container, Content, Input, Item,Form} from 'native-base'
 import firebase from '../../src/fire'
-import LinearGradient from 'react-native-linear-gradient';
+import { LinearGradient } from 'expo';
 
 class SignInScreen extends Component {
   constructor(props){
@@ -14,11 +14,10 @@ class SignInScreen extends Component {
     }
   }
   
-  static navigationOptions = () => {
-    return{
-      header: null,
-    };  
-  }
+  
+  static navigationOptions = {
+    title: 'Log in',
+  };
 
   login = () =>{
     let userEmail = this.state.email
@@ -39,35 +38,42 @@ class SignInScreen extends Component {
     return (
           <Container>
             <Header />
+            <LinearGradient colors={['#285aeb', '#e249bd', '#ff7387', '#ffb771','#fdf497']} start={[0.1,0.1]} style={{
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        top:0
+      }}>
+
               <View style={styles.container}>
-                <View style={styles.box}>
-                  <Text style={{textAlignVertical: "center",textAlign: "center",}}>Instagram</Text>
-                </View>
                 <View style={styles.box}> 
                   <Form>
-                    <Item rounded style={{marginBottom:30}}>
+                    <Item rounded style={{marginBottom:30, backgroundColor:'white'}}>
                       <Input placeholder="Email" onChangeText={(emailInput) => this.setState({email: emailInput})} />
                     </Item>
-                    <Item rounded>
+                    <Item rounded style={{backgroundColor: 'white'}}>
                       <Input placeholder="Password" secureTextEntry={true} onChangeText={(passwordInput) => this.setState({password: passwordInput})} />
                     </Item>
                   </Form>
                 </View>
                 <View style={styles.box}> 
                   <Body>
-                    <Button bordered dark onPress={this.login} style={styles.buttonStyle}>
+                    <Button rounded light onPress={this.login} style={styles.buttonStyle}>
                       <Text>Sign Up</Text>
                     </Button>
                   </Body>
                 </View>
                 <View style={styles.box}> 
                   <Body>
-                    <Button bordered dark style={styles.buttonStyle} onPress={() => this.props.navigation.navigate('Register')}>
+                    <Button rounded light style={styles.buttonStyle} onPress={() => this.props.navigation.navigate('Register')}>
                       <Text> Already have an account? </Text>
                     </Button>
                   </Body>
                 </View>
               </View>
+              
+            </LinearGradient>
           </Container>
     );
   }
@@ -80,7 +86,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-  box:{ 
+  box:{
+    color:'white', 
     width: '90%',
   },
   buttonStyle:{
