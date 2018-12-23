@@ -10,26 +10,33 @@ export default class LoginScreen extends Component {
     this.state = {
       selectedPhoto: {},
       imageUrl:'',
-      uploading: false,
-      currentUserId:''
+      email: '',
+      password: '',
+      isPhotoSelected: false,
     };
   }
 
   
-  createUser = ()  => {  
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword("rudolf@gmail.com","rudolf123")
-      .then(async (userData) => {
-        await this.uploadUserToDB(userData.user.uid)
-                
-        this.setState({
-          currentUserId: userData.user.uid
-        })
+  createUser = ()  => {
+    const userEmail = this.state.email
+    const userPassword = this.state.password
 
-      })
-      .then(user => this.props.navigation.navigate('HomeFeed'))
-      .catch(error => this.setState({ errorMessage: error.message }))
+    if(userEmail != '' && userPassword != '' && this.state.isPhotoSelected){
+      if(userPassword.length > 3){
+        firebase
+        .auth()
+        .createUserWithEmailAndPassword(userEmail,userPassword)
+        .then(async (userData) => {
+          await this.uploadUserToDB(userData.user.uid)
+        })
+        .then(user => this.props.navigation.navigate('HomeFeed'))
+        .catch(error => this.setState({ errorMessage: error.message }))
+      }else{
+        console.log("Password length is to short");
+      }
+    }else{
+      console.log("Username or password is empty");
+    }  
   }
 
 
@@ -37,17 +44,12 @@ export default class LoginScreen extends Component {
   _handleImagePicked = async (pickerResult,userID) => {
     let uploadUrl = "-1"
     try {
-      this.setState({ uploading: true });
-
-
       if (!pickerResult.cancelled) {
         uploadUrl = await uploadImageAsync(pickerResult.uri, userID);
       }
     } catch (e) {
       console.log(e);
       alert('Upload failed, sorry :(');
-    } finally {
-      this.setState({ uploading: false });
     }
     return uploadUrl
   };
@@ -58,8 +60,8 @@ export default class LoginScreen extends Component {
 
     firebase.database().ref('users/' + userId).set({
       uid: userId, 
-      username: "rudolf@gmail.com",
-      password: "rudolf123",
+      email: this.state.email,
+      password: this.state.password,
       imageUrl: imageUri
     });
 
@@ -73,7 +75,8 @@ export default class LoginScreen extends Component {
     });
 
     this.setState({
-      selectedPhoto: pickerResult
+      selectedPhoto: pickerResult,
+      isPhotoSelected: true
     })
   };
 
@@ -91,10 +94,10 @@ export default class LoginScreen extends Component {
               <Text>Select a photo</Text>
             </Button>
             <Item>
-              <Input placeholder="Username" />
+              <Input placeholder="Username" onChangeText={(emailInput) => this.setState({email: emailInput})} />
             </Item>
             <Item>
-              <Input placeholder="Password" />
+              <Input placeholder="Password" onChangeText={(passwordInput) => this.setState({password: passwordInput})} />
             </Item>
           </Form>
         </View>
