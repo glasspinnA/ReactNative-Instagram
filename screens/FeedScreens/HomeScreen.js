@@ -60,12 +60,16 @@ class HomeScreen extends React.Component {
       for (let item in statusItems) {
         newStatusArray.push({
           id: item,
-          title: statusItems[item].userId
+          postText: statusItems[item].postText,
+          imageUrl: statusItems[item].imageUrl,
+          profileImageUrl: statusItems[item].profileImageUrl,
+          timestamp: statusItems[item].timestamp,
+          username: statusItems[item].username,
         });
       } 
 
       this.setState({
-        statusArray: newStatusArray
+        statusArray: newStatusArray.reverse()
       })
     })
   }
@@ -77,7 +81,14 @@ class HomeScreen extends React.Component {
   renderPosts = () => {
     return this.state.statusArray.map((value,index) => {
       return(        
-        <CustomCard key={index} username={value.id}/>
+        <CustomCard 
+        key={index} 
+        username={value.username} 
+        timestamp={value.timestamp} 
+        imageUrl={value.imageUrl} 
+        postText={value.postText}
+        profileImageUrl={value.profileImageUrl}
+        />
       )        
     })
   }

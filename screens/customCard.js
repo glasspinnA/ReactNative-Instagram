@@ -10,15 +10,15 @@ class CustomCard extends React.Component {
       <Card>
         <CardItem>
             <Left>
-              <Thumbnail source={{uri: 'https://facebook.github.io/react-native/img/showcase/facebook.png'}} style={[styles.posterPic]} />
+              <Thumbnail source={{uri: this.props.profileImageUrl}} style={[styles.posterPic]} />
               <Body>
                 <Text>{this.props.username}</Text>
-                <Text note>Time and date</Text>
+                <Text note>{this.props.timestamp}</Text>
               </Body>
             </Left>
         </CardItem>
         <CardItem cardBody>
-          <Image source={{uri: 'https://facebook.github.io/react-native/img/showcase/facebook.png'}} style={{height:200, width:null, flex:1}}/>
+          <Image source={{uri: this.props.imageUrl}} style={{height:200, width:null, flex:1}}/>
         </CardItem>
         <CardItem>
           <Left>
@@ -38,12 +38,8 @@ class CustomCard extends React.Component {
         </CardItem>
         <CardItem>
           <Body>
-            <Text style={{fontWeight: 'bold'}}>
-              Usernam
-            </Text>
-            <Text>
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac felis at urna hendrerit dignissim. Sed eget tellus at eros gravida elementum a quis tortor. Aliquam ultricies sed mi sit amet vehicula. Nulla interdum euismod fermentum. Nulla sit amet justo augue. Praesent feugiat eleifend nisi, ac placerat ligula tempus dictum. Etiam efficitur fermentum lectus eget mattis. Praesent tempus hendrerit nisi. Nulla quis consequat augue, eget aliquet risus. Sed nec lectus bibendum, blandit purus ac, ultrices augue. In quis nunc at justo facilisis vehicula.'
-            </Text>
+            <Text style={{fontWeight: 'bold'}}> {this.props.username} </Text>
+            <Text>{this.props.postText}</Text>
           </Body>
         </CardItem>
       </Card>

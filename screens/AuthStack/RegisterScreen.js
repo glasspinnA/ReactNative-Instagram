@@ -6,7 +6,7 @@ import firebase from '../../src/fire'
 
 export default class LoginScreen extends Component {
   /* 
-  * TODO: Fix layout
+  * TODO: Add Username input field
   */
 
   static navigationOptions = {

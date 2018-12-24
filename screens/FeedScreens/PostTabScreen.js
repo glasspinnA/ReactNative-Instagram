@@ -11,12 +11,14 @@ export default class PostTabScreen extends Component {
     this.state = {
       selectedPhoto: {},
       isPhotoSelected: false,
-      currentUserId: '',
+      userUsername: '',
+      userProfileImage: '',
     };
   }
 
-  componentDidMount(){
-    this.getCurrentUserId()
+  async componentDidMount(){
+    await this.getCurrentUserId()
+    this.getCurrentUsername()
   }
 
 
@@ -32,6 +34,20 @@ export default class PostTabScreen extends Component {
     }
   }
 
+  getCurrentUsername = () => {
+    var ref = firebase.database().ref('users/').child(this.state.currentUserId)
+    ref.once("value", (snapshot => {
+      let responseObject = snapshot.val();
+      
+      this.setState({
+        userUsername: responseObject.username,
+        userProfileImage: responseObject.imageUrl
+      })
+      
+
+    }))
+  }
+
 
   uploadImage = async () => {
     let selectedPicture = this.state.selectedPhoto
@@ -44,7 +60,9 @@ export default class PostTabScreen extends Component {
             uid: this.state.currentUserId,
             timestamp: new Date().getTime(),
             imageUrl: uploadUrl,
-            postText: 'Test'
+            postText: 'Test',
+            username: this.state.userUsername,
+            profileImageUrl: this.state.userProfileImage,
           })
           .then(() => {
             this.setState({
