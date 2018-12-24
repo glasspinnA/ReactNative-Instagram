@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import {View,Text,Image, StyleSheet} from 'react-native';
 import {Card,CardItem,Thumbnail,Button,Icon,Body,Left,Right} from 'native-base';
+import { withNavigation } from 'react-navigation';
+
 
 class CustomCard extends React.Component {
 
+  createComment = () => {
+    alert("Comment")
+  }
 
   render() {
     return (
@@ -25,7 +30,13 @@ class CustomCard extends React.Component {
             <Button transparent>
               <Icon name="md-heart-empty" style={[styles.cardButtons]}></Icon>
             </Button>
-            <Button transparent>
+            <Button 
+              transparent 
+              onPress={() => {
+                this.props.navigation.navigate('Comment', {
+                  postId:this.props.postId
+                })
+              }} >
               <Icon name="md-chatboxes" style={[styles.cardButtons]}></Icon>
             </Button>
             <Button transparent>
@@ -60,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomCard;
+export default withNavigation(CustomCard);

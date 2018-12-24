@@ -74,6 +74,7 @@ class HomeScreen extends React.Component {
           profileImageUrl: statusItems[item].profileImageUrl,
           timestamp: this.convertTimestamp(statusItems[item].timestamp),
           username: statusItems[item].username,
+          postId: statusItems[item].postId,
         });
       } 
 
@@ -110,6 +111,7 @@ class HomeScreen extends React.Component {
         imageUrl={value.imageUrl} 
         postText={value.postText}
         profileImageUrl={value.profileImageUrl}
+        postId={value.postId}
         />
       )        
     })

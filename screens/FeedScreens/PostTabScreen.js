@@ -90,6 +90,13 @@ export default class PostTabScreen extends Component {
 
           if(this.state.postText.length > 1){
 
+            firebase.database().ref('user-posts/').child(this.state.currentUserId).push({
+              uid: this.state.currentUserId,
+              imageUrl: uploadUrl,
+              timestamp: new Date().getTime(),
+            })
+
+
             firebase.database().ref('posts/').child(uuid.v4()).set({
               uid: this.state.currentUserId,
               timestamp: new Date().getTime(),
@@ -97,6 +104,7 @@ export default class PostTabScreen extends Component {
               postText: this.state.postText,
               username: this.state.userUsername,
               profileImageUrl: this.state.userProfileImage,
+              postId: uuid.v4(),
             })
             .then(() => {
               this.setState({
@@ -153,7 +161,7 @@ export default class PostTabScreen extends Component {
     return (
       <Container>
         <Content>
-          <Image source={{uri: this.state.selectedPhoto.uri}} style={styles.imageBox}/>
+          <Image source={{uri: this.state.selectedPhoto.uri}} resizeMode='cover' style={styles.imageBox}/>
           <Item>
             <Input 
               placeholder={'Enter your text'} 
@@ -176,8 +184,8 @@ const styles = StyleSheet.create({
     padding:20,
   },
   imageBox:{
-    height:200, 
-    width:200,
+    height:350, 
+    width:350,
     flex:1,
     borderColor: 'black',
     borderWidth: 2,

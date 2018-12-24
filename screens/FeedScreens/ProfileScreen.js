@@ -1,22 +1,9 @@
 import React, { PureComponent } from 'react';
 import {  View, Text, StyleSheet, Image,Dimensions  } from 'react-native';
 import { Container, Content, Thumbnail, Button,Icon} from 'native-base';
+import firebase from './../../src/fire'
 
 
-var images = [
-    require('../../assets/jonna2.jpg'),
-    require('../../assets/jonna2.jpg'),
-    require('../../assets/jonna2.jpg'),
-    require('../../assets/jonna2.jpg'),
-    require('../../assets/jonna2.jpg'),
-    require('../../assets/jonna2.jpg'),
-    require('../../assets/jonna2.jpg'),
-
-]
-
-/*
-* TODO: Make so only current users posts are shown here
-*/
 
 class ProfileScreen extends PureComponent {
 
@@ -24,13 +11,57 @@ class ProfileScreen extends PureComponent {
     constructor(props){
         super(props)
         this.state = {
-            activeIndex: 0
+            activeIndex: 0,
+            imageArray: [],
         }
     }
 
+    async componentDidMount() {
+        let userId = await this.getCurrentUserId()
+        this.fetchFromFireBase(userId)
+    }
+
+
+    getCurrentUserId = () => {
+        let user = firebase.auth().currentUser
+        let uid = ''
+
+        if(user){
+            uid = firebase.auth().currentUser.uid
+        }else{
+          console.log("No logged in user");
+        }
+
+        return uid
+    }
+
+
+    fetchFromFireBase = (uid) => {
+        console.log("Fetching");
+        
+        
+        firebase.database().ref('user-posts/')
+        .child(uid)
+        .once('value',snapshot =>{
+            let statusItems = snapshot.val();
+            let newStatusArray = [];
+
+            for (let item in statusItems) {
+                newStatusArray.push({
+                imageUrl: statusItems[item].imageUrl,
+            });
+        } 
+
+      this.setState({
+        //Reverse so newst post is on top
+        imageArray: newStatusArray.reverse()
+      })
+    })
+    }
+
     static navigationOptions = {
-        headerTitle: 'Username',
-      };
+        headerTitle: 'username',
+    };
 
     
 
@@ -43,10 +74,10 @@ class ProfileScreen extends PureComponent {
     renderPageOne = () => {
         const deviceWidth = Dimensions.get('window').width
 
-        return images.map((image, index) => {
+        return this.state.imageArray.map((value, index) => {
             return(
                 <View key={index} style={[ {width: deviceWidth / 3}, {height: deviceWidth / 3} ]}>
-                    <Image style={{ flex: 1, width:undefined, height: undefined}} source={image}/>
+                    <Image style={{ flex: 1, width:undefined, height: undefined}} source={{uri:value.imageUrl}}/>
                 </View>
             )
         })
