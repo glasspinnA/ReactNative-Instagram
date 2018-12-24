@@ -69,6 +69,7 @@ class HomeScreen extends React.Component {
       } 
 
       this.setState({
+        //Reverse so newst post is on top
         statusArray: newStatusArray.reverse()
       })
     })

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import firebase from './../../src/fire'
-import { Container, Button } from 'native-base';
+import { Container, Button, Item, Input } from 'native-base';
 import uuid from 'uuid';
-import {ImagePicker} from 'expo'
+import {ImagePicker, Permissions} from 'expo'
 
 export default class PostTabScreen extends Component {
   constructor(props) {
@@ -13,12 +13,16 @@ export default class PostTabScreen extends Component {
       isPhotoSelected: false,
       userUsername: '',
       userProfileImage: '',
+      postText: '',
     };
   }
 
   async componentDidMount(){
     await this.getCurrentUserId()
     this.getCurrentUsername()
+    
+    await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    await Permissions.askAsync(Permissions.CAMERA);
   }
 
 
@@ -60,7 +64,7 @@ export default class PostTabScreen extends Component {
             uid: this.state.currentUserId,
             timestamp: new Date().getTime(),
             imageUrl: uploadUrl,
-            postText: 'Test',
+            postText: this.state.postText,
             username: this.state.userUsername,
             profileImageUrl: this.state.userProfileImage,
           })
@@ -93,9 +97,21 @@ export default class PostTabScreen extends Component {
     })
   };
 
-  cameraSelect = () => {
-    alert("Camera")
-  }
+  
+  cameraSelect = async () => {
+    let pickerResult = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.4
+    });
+
+    
+    this.setState({
+      selectedPhoto: pickerResult,
+      isPhotoSelected: true,
+    })
+  };
+
 
   render() {
     return (
@@ -116,7 +132,11 @@ export default class PostTabScreen extends Component {
           </Button>
         </View>
 
-
+        <Item>
+          <Input 
+            placeholder={'Enter your text'} 
+            onChangeText={(postTextInput) => this.setState({postText: postTextInput})} />
+        </Item>
 
         <View>
           <Button onPress={() => this.uploadImage()}>
