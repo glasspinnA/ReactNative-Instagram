@@ -18,7 +18,7 @@ class CustomCard extends React.Component {
             </Left>
         </CardItem>
         <CardItem cardBody>
-          <Image source={{uri: this.props.imageUrl}} style={{height:200, width:null, flex:1}}/>
+          <Image source={{uri: this.props.imageUrl}} resizeMode='contain' style={{height:300, width:null, flex:1}}/>
         </CardItem>
         <CardItem>
           <Left>
@@ -33,12 +33,12 @@ class CustomCard extends React.Component {
             </Button>
           </Left>
         </CardItem>
-        <CardItem style={{height: 5 }}>
+        <CardItem style={{height: 3 }}>
             <Text>Number of Likes</Text>
         </CardItem>
         <CardItem>
           <Body>
-            <Text style={{fontWeight: 'bold'}}> {this.props.username} </Text>
+            <Text style={{fontWeight: 'bold'}}>{this.props.username}</Text>
             <Text>{this.props.postText}</Text>
           </Body>
         </CardItem>

@@ -60,8 +60,9 @@ class HomeScreen extends React.Component {
   * Method for fetching status posts from database
   */
   fetchPostsFromDB = () =>{
-    let ref = firebase.database().ref('posts')
-    ref.once('value',snapshot =>{
+    firebase.database().ref('posts')
+    .orderByChild('timestamp')
+    .once('value',snapshot =>{
       let statusItems = snapshot.val();
       let newStatusArray = [];
 
@@ -71,7 +72,7 @@ class HomeScreen extends React.Component {
           postText: statusItems[item].postText,
           imageUrl: statusItems[item].imageUrl,
           profileImageUrl: statusItems[item].profileImageUrl,
-          timestamp: statusItems[item].timestamp,
+          timestamp: this.convertTimestamp(statusItems[item].timestamp),
           username: statusItems[item].username,
         });
       } 
@@ -81,6 +82,18 @@ class HomeScreen extends React.Component {
         statusArray: newStatusArray.reverse()
       })
     })
+  }
+
+  convertTimestamp = (timestamp) =>{
+    let date = new Date(timestamp)
+
+    let timeString = (date.getHours() + ":" + 
+                      date.getMinutes() + " " + 
+                      date.getDate() + "/"+ 
+                      date.getMonth() + "/" + 
+                      date.getFullYear()).toString()
+
+    return timeString
   }
 
 

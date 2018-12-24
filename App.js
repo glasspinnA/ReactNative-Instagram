@@ -35,9 +35,9 @@ const PostTabStack = createStackNavigator({
 
 const TabStack = createBottomTabNavigator(
   {
-    PostTab:{screen: PostTabStack},
   Home: {screen: HomeStack},
   Like: {screen: LikeStack},
+  PostTab:{screen: PostTabStack},
   Profile: {screen: ProfileStack},
   },
   {
@@ -51,6 +51,9 @@ const TabStack = createBottomTabNavigator(
           iconName = `md-heart${focused ? '' : '-empty'}`;
         } else if (routeName === 'Profile'){
           iconName = 'md-home'
+        }
+        else if (routeName === 'PostTab'){
+          iconName = 'md-camera'
         }
 
         return <Ionicons name={iconName} size={25} color={tintColor} />;

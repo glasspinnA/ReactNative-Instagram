@@ -5,6 +5,12 @@ import { Container, Button, Item, Input, Icon, Content } from 'native-base';
 import uuid from 'uuid';
 import {ImagePicker, Permissions} from 'expo'
 
+
+/*
+* TODO:
+* Fix better UI 
+*/ 
+
 export default class PostTabScreen extends Component {
   constructor(props) {
     super(props);
@@ -104,7 +110,7 @@ export default class PostTabScreen extends Component {
           }else{
             alert("Enter a text")
           }
-          
+
         }
       } catch (e) {
         console.log(e);
@@ -115,9 +121,9 @@ export default class PostTabScreen extends Component {
   
   _imageSelect = async () => {
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: false,
+      allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.5,
+      quality: 0.3,
     });
 
     this.setState({
@@ -131,7 +137,7 @@ export default class PostTabScreen extends Component {
     let pickerResult = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.4
+      quality: 0.3
     });
 
     
