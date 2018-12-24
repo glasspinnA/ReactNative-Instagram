@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image, StyleSheet,Dimensions } from 'react-native';
 import firebase from './../../src/fire'
-import { Container, Button, Item, Input } from 'native-base';
+import { Container, Button, Item, Input, Icon, Content } from 'native-base';
 import uuid from 'uuid';
 import {ImagePicker, Permissions} from 'expo'
 
@@ -18,11 +18,33 @@ export default class PostTabScreen extends Component {
   }
 
   async componentDidMount(){
+    this.props.navigation.setParams({ cameraSelect: this._cameraSelect, imageSelect: this._imageSelect });
+
     await this.getCurrentUserId()
     this.getCurrentUsername()
     
     await Permissions.askAsync(Permissions.CAMERA_ROLL);
     await Permissions.askAsync(Permissions.CAMERA);
+  }
+
+  
+  static navigationOptions = ({navigation}) => {
+    const { params = {} } = navigation.state;
+
+    return{
+      headerTitle: 'Create A Post',
+      headerLeft: (
+        <Button transparent onPress={() => params.cameraSelect()}>
+          <Icon name='md-camera' style={{paddingTop:10, paddingLeft:10, color:'black'}} />
+        </Button>
+        
+      ),
+      headerRight: (
+        <Button transparent onPress={() => params.imageSelect()}>
+          <Icon name='md-images' style={{paddingTop:10, paddingLeft:10, color:'black'}} />
+        </Button>
+      ),
+    }
   }
 
 
@@ -60,22 +82,29 @@ export default class PostTabScreen extends Component {
         if (!selectedPicture.cancelled) {
           uploadUrl = await uploadImageAsync(selectedPicture.uri);
 
-          firebase.database().ref('posts/').child(uuid.v4()).set({
-            uid: this.state.currentUserId,
-            timestamp: new Date().getTime(),
-            imageUrl: uploadUrl,
-            postText: this.state.postText,
-            username: this.state.userUsername,
-            profileImageUrl: this.state.userProfileImage,
-          })
-          .then(() => {
-            this.setState({
-              isPhotoSelected: false,
+          if(this.state.postText.length > 1){
+
+            firebase.database().ref('posts/').child(uuid.v4()).set({
+              uid: this.state.currentUserId,
+              timestamp: new Date().getTime(),
+              imageUrl: uploadUrl,
+              postText: this.state.postText,
+              username: this.state.userUsername,
+              profileImageUrl: this.state.userProfileImage,
             })
-          })
-          .catch((error) => {
-            alert(error)
-          })
+            .then(() => {
+              this.setState({
+                isPhotoSelected: false,
+              })
+            })
+            .catch((error) => {
+              alert(error)
+            })
+
+          }else{
+            alert("Enter a text")
+          }
+          
         }
       } catch (e) {
         console.log(e);
@@ -84,7 +113,7 @@ export default class PostTabScreen extends Component {
     }
   }
   
-  selectImage = async () => {
+  _imageSelect = async () => {
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: false,
       aspect: [4, 3],
@@ -98,7 +127,7 @@ export default class PostTabScreen extends Component {
   };
 
   
-  cameraSelect = async () => {
+  _cameraSelect = async () => {
     let pickerResult = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [4, 3],
@@ -113,41 +142,42 @@ export default class PostTabScreen extends Component {
   };
 
 
+
   render() {
     return (
       <Container>
+        <Content>
+          <Image source={{uri: this.state.selectedPhoto.uri}} style={styles.imageBox}/>
+          <Item>
+            <Input 
+              placeholder={'Enter your text'} 
+              onChangeText={(postTextInput) => this.setState({postText: postTextInput})} />
+          </Item>
+          
         <View>
-          <Text> textInComponent </Text>
-        </View>
-
-        <View>
-          <Button onPress={this.selectImage}>
-            <Text>Select Picture</Text>
-          </Button>
-        </View>
-        
-        <View>
-          <Button onPress={this.cameraSelect}>
-            <Text>Select Camera</Text>
-          </Button>
-        </View>
-
-        <Item>
-          <Input 
-            placeholder={'Enter your text'} 
-            onChangeText={(postTextInput) => this.setState({postText: postTextInput})} />
-        </Item>
-
-        <View>
-          <Button onPress={() => this.uploadImage()}>
+          <Button light rounded onPress={() => this.uploadImage()} style={styles.customButton}>
             <Text>Upload</Text>
           </Button>
         </View>
-
+        </Content>
       </Container>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  customButton:{
+    padding:20,
+  },
+  imageBox:{
+    height:200, 
+    width:200,
+    flex:1,
+    borderColor: 'black',
+    borderWidth: 2,
+    borderRadius: 20,
+  },
+})
 
 
 

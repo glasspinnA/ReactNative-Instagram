@@ -14,6 +14,10 @@ var images = [
 
 ]
 
+/*
+* TODO: Make so only current users posts are shown here
+*/
+
 class ProfileScreen extends PureComponent {
 
 

@@ -5,6 +5,14 @@ import CustomCard from '../CustomCard';
 import StoriesTab from "../StoriesTab";
 import firebase from "../../src/fire";
 
+
+
+/*
+* TODO: 
+* Be able to comment on a post 
+* Be a to like a post
+*/
+
 class HomeScreen extends React.Component {
   
   constructor(props){
