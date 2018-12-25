@@ -34,7 +34,9 @@ class CustomCard extends React.Component {
               transparent 
               onPress={() => {
                 this.props.navigation.navigate('Comment', {
-                  postId:this.props.postId
+                  postId:this.props.postId,
+                  userUsername: this.props.username,
+                  userProfileImageUrl: this.props.profileImageUrl,
                 })
               }} >
               <Icon name="md-chatboxes" style={[styles.cardButtons]}></Icon>
