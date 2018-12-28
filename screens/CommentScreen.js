@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, KeyboardAvoidingView } from 'react-native';
-import {Button, Item, Input, Content, Container, Left, Right,Body, Thumbnail, List, ListItem, } from 'native-base'
+import {Button, Item, Input, Left, Right,Body, Thumbnail, List, ListItem, } from 'native-base'
 import Fire from './../src/Fire'
 
 class CommentScreen extends Component {
@@ -9,12 +9,9 @@ class CommentScreen extends Component {
         super(props);
         this.state = {
             commentText: '',
-            currentUserId:'',
-            currentUserUsername:'',
-            currentUserImageUrl:'',
             postId: '',
             post:{},
-            statusArray: [],
+            commentArray: [],
         };
     }
 
@@ -41,8 +38,7 @@ class CommentScreen extends Component {
         let responseArray = await Fire.shared.fetchComments(postId)
         
         this.setState({
-            //Reverse so newst post is on top
-            statusArray: responseArray.reverse()
+            commentArray: responseArray.reverse()
         })
     }
 
@@ -55,7 +51,7 @@ class CommentScreen extends Component {
     }
 
     renderComments = () => {
-        return this.state.statusArray.map((value,index) => {
+        return this.state.commentArray.map((value,index) => {
           return(
                 <ListItem key={index} avatar>
                     <Left>
@@ -73,13 +69,6 @@ class CommentScreen extends Component {
         })
       }
 
-      /*
-
-
-      
-            
-      */
-
   render() {
     return (
         <View style={styles.container}>
@@ -89,7 +78,7 @@ class CommentScreen extends Component {
                     {this.renderComments()}
                 </List>            
             </View>
-            
+
             <View style={styles.childrenBox}>
                 <View style={{flexDirection:'row'}}>
                     <Body>
