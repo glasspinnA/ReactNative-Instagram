@@ -37,6 +37,10 @@ class Fire{
     })
   }
 
+  updateUserInfo = (uid,userInfo) =>{
+    firebase.database().ref('users/' + uid ).update({userInfo: userInfo})
+  }
+
 
   /**
    * Function that fetches posts from Firebase
@@ -85,6 +89,17 @@ class Fire{
     return newStatusArray
   }
 
+  fetchUserInfo = async (uid) => {
+    let response
+    await firebase.database().ref('users/' + uid)
+    .child('userInfo')
+    .once('value',snapshot =>{
+      response = snapshot.val();      
+    })
+
+    return response
+  }
+
   /**
    * Function for getting the current user logged in
    */
@@ -104,6 +119,7 @@ class Fire{
           uid: statusItems.uid,
           username: statusItems.username,
           imageUrl: statusItems.imageUrl,
+          userInfo: statusItems.userInfo
         });
       
     })
@@ -186,6 +202,7 @@ class Fire{
       email: user.email,
       imageUrl: imageUri,
       username: user.username,
+      userInfo:'',
     });
   }
 
@@ -243,6 +260,10 @@ uploadImageAsync = async(uri,userId,isUploadingPost) => {
       uid: userObject[0].uid,
       username: userObject[0].username,
       userProfileUrl: userObject[0].imageUrl,
+    })
+
+    firebase.database().ref('user-posts/').child(userObject[0].uid).push({
+      imageUrl: url,
     })
   }  
 

@@ -10,7 +10,8 @@ import LikeScreen from './screens/FeedScreens/LikeScreen'
 import ProfileScreen from './screens/FeedScreens/ProfileScreen'
 
 import PostTabScreen from './screens/FeedScreens/PostTabScreen'
-import CommentScreen from './screens/CommentScreen'
+import CommentScreen from './screens/FeedScreens/CommentScreen'
+import EditScreen from './screens/FeedScreens/EditScreen'
 
 const AuthProcessStack = createStackNavigator({
   Login: LoginScreen,
@@ -28,6 +29,7 @@ const HomeStack = createStackNavigator({
 
 const ProfileStack = createStackNavigator({
   Profile: {screen: ProfileScreen},
+  Edit: {screen: EditScreen},
 });
 
 

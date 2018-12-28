@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet,Dimensions } from 'react-native';
-import Fire from './../../src/Fire'
+import Fire from '../../src/Fire'
 import { Container, Button, Item, Input, Icon, Content } from 'native-base';
 import uuid from 'uuid';
 import {ImagePicker, Permissions} from 'expo'

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import {Button, Item, Input, Left, Right,Body, Thumbnail, List, ListItem, } from 'native-base'
-import Fire from './../src/Fire'
+import Fire from '../../src/Fire'
 
 class CommentScreen extends Component {
 
