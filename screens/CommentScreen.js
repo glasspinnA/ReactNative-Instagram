@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import {Button, Item, Input, Content, Container, Left, Right,Body, Thumbnail, List, ListItem, Image } from 'native-base'
-import firebase from './../src/fire'
+import Fire from './../src/Fire'
 
 class CommentScreen extends Component {
 
@@ -13,6 +13,7 @@ class CommentScreen extends Component {
         currentUserUsername:'',
         currentUserImageUrl:'',
         postId: '',
+        post:{},
         statusArray: [],
     };
   }
@@ -20,59 +21,36 @@ class CommentScreen extends Component {
     componentDidMount(){ 
 
         const { navigation } = this.props;
+        const postObject = navigation.getParam('postObject', 'NO-POST-OBJECT')
+        
         const postId = navigation.getParam('postId', 'NO-POST-ID');
         const userUsername = navigation.getParam('userUsername', 'NO-POST-ID');
         const userProfileImageUrl = navigation.getParam('userProfileImageUrl', 'NO-POST-ID');
 
         this.setState({
-            postId: postId,
-            currentUserUsername: userUsername,
-            currentUserImageUrl: userProfileImageUrl,
+            post: postObject
         })
 
-        this.fetchComments(postId)
+        this.fetchComments(postObject.postId)
         
     }
 
-    fetchComments = (postId) =>{
-        firebase.database().ref('post-comments-by-user')
-        .child(postId)
-            .once('value',snapshot =>{
-      let statusItems = snapshot.val();
-      console.log(statusItems);
-      
-      let newStatusArray = [];
-
-      for (let item in statusItems) {
-        newStatusArray.push({
-          id: item,
-          postText: statusItems[item].comment,
-          profileImageUrl: statusItems[item].profileImageUrl,
-          timestamp: statusItems[item].timestamp,
-          username: statusItems[item].username,
-        });
-      } 
+    fetchComments = async (postId) =>{
+        let responseArray = await Fire.shared.fetchComments(postId)
+        
 
       this.setState({
         //Reverse so newst post is on top
-        statusArray: newStatusArray.reverse()
+        statusArray: responseArray.reverse()
       })
-    })
+    
     }
 
 
     postComment = () =>{
         const commentText = this.state.commentText
         if(commentText.length > 0){
-            firebase.database().ref('post-comments-by-user/' + this.state.postId).push({
-                timestamp: new Date().getTime(),
-                comment: commentText,
-                username: this.state.currentUserUsername,
-                profileImageUrl: this.state.currentUserImageUrl,
-                uid: this.state.currentUserId,
-            })
-
-            this.forceUpdate();
+            Fire.shared.postComment(this.state.post.id,commentText)
         }
     }
 
@@ -81,14 +59,18 @@ class CommentScreen extends Component {
           return(
                 <ListItem key={index} avatar>
 
+
                 <Left>
                     <Thumbnail source={{uri:value.profileImageUrl}} />
                 </Left>
                 <Body>
-                    <Text>{value.username}</Text>
-                    <Text note>{value.postText}</Text>
+    
                 </Body>
+                
                 <Right>
+                    
+                <Text>{value.username}</Text>
+                    <Text note>{value.commentText}</Text>
                     <Text note>{value.timestamp}</Text>
                 </Right>
                 </ListItem>

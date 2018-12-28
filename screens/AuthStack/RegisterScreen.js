@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import {Button, Header, Body, Container, Content, Input, Item,Form, Thumbnail, Label} from 'native-base'
 import {ImagePicker} from 'expo'
-import firebase from '../../src/fire'
+import Fire from '../../src/Fire'
 
 export default class LoginScreen extends Component {
   /* 
@@ -20,58 +20,34 @@ export default class LoginScreen extends Component {
       imageUrl:'',
       email: '',
       password: '',
+      username: 'göran',
       isPhotoSelected: false,
     };
   }
 
-  
-  createUser = ()  => {    
-    const userEmail = this.state.email
-    const userPassword = this.state.password
 
-    if(userEmail != '' && userPassword != '' && this.state.isPhotoSelected){
-      if(userPassword.length > 3){
-        firebase
-        .auth()
-        .createUserWithEmailAndPassword(userEmail,userPassword)
-        .then(async (userData) => {
-          await this.uploadUserToDB(userData.user.uid)
-        })
-        .then(user => this.props.navigation.navigate('HomeFeed'))
-        .catch(error => this.setState({ errorMessage: error.message }))
+  createUser = ()  => {
+    const selectedPhoto = this.state.selectedPhoto
+
+    const user = {
+      username: this.state.username,
+      email: this.state.email,
+      password: this.state.password,   
+      photo: selectedPhoto
+    }
+
+    if(user.email != '' && user.password != '' && this.state.isPhotoSelected){
+      if(user.password.length > 3){
+        
+        if(Fire.shared.createUser(user)){
+          this.props.navigation.navigate('HomeFeed')
+        }
       }else{
         console.log("Password length is to short");
       }
     }else{
       console.log("Username or password is empty");
     }  
-  }
-
-
-
-  _handleImagePicked = async (pickerResult,userID) => {
-    let uploadUrl = "-1"
-    try {
-      if (!pickerResult.cancelled) {
-        uploadUrl = await uploadImageAsync(pickerResult.uri, userID);
-      }
-    } catch (e) {
-      console.log(e);
-      alert('Upload failed, sorry :(');
-    }
-    return uploadUrl
-  };
-
-
-  uploadUserToDB = async (userId) => {    
-    let imageUri = await this._handleImagePicked(this.state.selectedPhoto,userId)
-
-    firebase.database().ref('users/' + userId).set({
-      uid: userId, 
-      email: this.state.email,
-      imageUrl: imageUri
-    });
-
   }
 
   _pickImage = async () => {

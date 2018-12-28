@@ -3,25 +3,13 @@ import {
     View,
     Text,
     StyleSheet,
-    Button
+    Button,
+    FlatList,
+    List,
 } from "react-native";
+import firebase from '../../src/Fire'
+import {Content, Container, Image} from 'native-base'
 
-
-/*
-import firebase from 'firebase'
-//import Post from '../src/custom_objects/post'
-
-const config = {
-  apiKey: "AIzaSyAXsRxyvpSGxXY9nv_ZvJYVvBKbCZQFFbM",
-  authDomain: "instagram-react-f8775.firebaseapp.com",
-  databaseURL: "https://instagram-react-f8775.firebaseio.com",
-  projectId: "instagram-react-f8775",
-  storageBucket: "instagram-react-f8775.appspot.com",
-  messagingSenderId: "108838635737"
-};
-
-firebase.initializeApp(config)
-*/
 class LikeScreen extends Component {
   
 
@@ -53,16 +41,25 @@ class LikeScreen extends Component {
     itemsRef.set(posts)
   }
 
+  handleEnd = () => {
+    
+  }
+
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Like!</Text>
-        <Button
-          title="Go to Home"
-          onPress={() => this.firebaseTalk()}
-        />
-      </View>
-    );
+      <Container>
+        <Content>
+          <List>
+            <FlatList 
+              onEndReached = {this.handleEnd}
+              onEndReachedThreshold={0}
+            >
+
+            </FlatList>
+          </List>
+        </Content>
+      </Container>
+    )
   }
 }
 

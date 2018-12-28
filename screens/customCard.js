@@ -6,24 +6,20 @@ import { withNavigation } from 'react-navigation';
 
 class CustomCard extends React.Component {
 
-  createComment = () => {
-    alert("Comment")
-  }
-
   render() {
     return (
       <Card>
         <CardItem>
             <Left>
-              <Thumbnail source={{uri: this.props.profileImageUrl}} style={[styles.posterPic]} />
+              <Thumbnail source={{uri: this.props.postObject.profileImageUrl}} style={[styles.posterPic]} />
               <Body>
-                <Text>{this.props.username}</Text>
-                <Text note>{this.props.timestamp}</Text>
+                <Text>{this.props.postObject.username}</Text>
+                <Text note>{this.props.postObject.timestamp}</Text>
               </Body>
             </Left>
         </CardItem>
         <CardItem cardBody>
-          <Image source={{uri: this.props.imageUrl}} resizeMode='contain' style={{height:300, width:null, flex:1}}/>
+          <Image source={{uri: this.props.postObject.imageUrl}} resizeMode='contain' style={{height:300, width:null, flex:1}}/>
         </CardItem>
         <CardItem>
           <Left>
@@ -34,9 +30,7 @@ class CustomCard extends React.Component {
               transparent 
               onPress={() => {
                 this.props.navigation.navigate('Comment', {
-                  postId:this.props.postId,
-                  userUsername: this.props.username,
-                  userProfileImageUrl: this.props.profileImageUrl,
+                  postObject: this.props.postObject
                 })
               }} >
               <Icon name="md-chatboxes" style={[styles.cardButtons]}></Icon>
@@ -52,7 +46,7 @@ class CustomCard extends React.Component {
         <CardItem>
           <Body>
             <Text style={{fontWeight: 'bold'}}>{this.props.username}</Text>
-            <Text>{this.props.postText}</Text>
+            <Text>{this.props.postObject.postText}</Text>
           </Body>
         </CardItem>
       </Card>

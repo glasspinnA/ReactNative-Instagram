@@ -1,75 +1,51 @@
 import React, { PureComponent } from 'react';
 import {  View, Text, StyleSheet, Image,Dimensions  } from 'react-native';
 import { Container, Content, Thumbnail, Button,Icon} from 'native-base';
-import firebase from './../../src/fire'
+import Fire from './../../src/Fire'
 
 
 
 class ProfileScreen extends PureComponent {
-
-
     constructor(props){
         super(props)
         this.state = {
             activeIndex: 0,
             imageArray: [],
+            username:'',
         }
+
     }
+
+
+  
+    static navigationOptions = ({ navigation }) => {
+        const {state} = navigation;
+        return {
+          title: 'username',
+        };
+      };
+      
 
     async componentDidMount() {
-        let userId = await this.getCurrentUserId()
-        this.fetchFromFireBase(userId)
-    }
-
-
-    getCurrentUserId = () => {
-        let user = firebase.auth().currentUser
-        let uid = ''
-
-        if(user){
-            uid = firebase.auth().currentUser.uid
-        }else{
-          console.log("No logged in user");
-        }
-
-        return uid
-    }
-
-
-    fetchFromFireBase = (uid) => {
-        console.log("Fetching");
+        let userArray = await Fire.shared.getUser()
         
-        
-        firebase.database().ref('user-posts/')
-        .child(uid)
-        .once('value',snapshot =>{
-            let statusItems = snapshot.val();
-            let newStatusArray = [];
 
-            for (let item in statusItems) {
-                newStatusArray.push({
-                imageUrl: statusItems[item].imageUrl,
-            });
-        } 
-
-      this.setState({
-        //Reverse so newst post is on top
-        imageArray: newStatusArray.reverse()
-      })
-    })
+        this.fetchUserPosts(userArray[0].uid)
     }
 
-    static navigationOptions = {
-        headerTitle: 'username',
-    };
-
+    fetchUserPosts = async (uid) => {
+        let responseArray = await Fire.shared.fetchUserPostsFromFirebase(uid)
+        
+        this.setState({
+            imageArray: responseArray
+        })
+    }
     
-
-      segmentClicked = (index) => {
+    segmentClicked = (index) => {
         this.setState({
             activeIndex: index
         })
-      }
+    }
 
     renderPageOne = () => {
         const deviceWidth = Dimensions.get('window').width
@@ -83,7 +59,7 @@ class ProfileScreen extends PureComponent {
         })
     }
 
-      renderSection = () =>{ 
+    renderSection = () =>{ 
         switch(this.state.activeIndex){
             case 0:
                 return (
@@ -98,7 +74,7 @@ class ProfileScreen extends PureComponent {
                     </View>
                 )
         }
-      }
+    }
 
   render() {
     return (
@@ -173,6 +149,5 @@ const style = StyleSheet.create({
         marginLeft: 10,
     }
 })
-
 
 export default ProfileScreen

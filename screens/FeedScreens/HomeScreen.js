@@ -1,20 +1,19 @@
 import React, { Alert, Component } from "react";
 import { View,Text,Button,Icon, Container,Content } from 'native-base'
 
-import CustomCard from '../CustomCard';
+import CustomCard from '../customCard'
 import StoriesTab from "../StoriesTab";
-import firebase from "../../src/fire";
+import Fire from "../../src/Fire";
 
 
 
 /*
 * TODO: 
-* Be able to comment on a post 
 * Be a to like a post
 */
 
-class HomeScreen extends React.Component {
-  
+export default class HomeScreen extends React.Component {
+
   constructor(props){
     super(props)
 
@@ -25,7 +24,7 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount(){
-    this.fetchPostsFromDB()
+    this.fetchFromDB()
     this.props.navigation.setParams({ logout: this._logout });
   }
 
@@ -47,54 +46,24 @@ class HomeScreen extends React.Component {
     };  
   }
 
+
+  /**
+   * Function for signing out the current user from the app and firebase
+   */
   _logout = () => {
-    firebase.auth().onAuthStateChanged(function(user) {
-      if(user){
-        firebase.auth().signOut()
-        alert("Log out")
-      }
-    })
+    Fire.shared.signOut()
   }
+  
+  /**
+   * Function for fetching posts from firebase
+   */
+  fetchFromDB = async () =>{
+    let responseArray = await Fire.shared.fetchFromDB()
 
-  /*
-  * Method for fetching status posts from database
-  */
-  fetchPostsFromDB = () =>{
-    firebase.database().ref('posts')
-    .orderByChild('timestamp')
-    .once('value',snapshot =>{
-      let statusItems = snapshot.val();
-      let newStatusArray = [];
-
-      for (let item in statusItems) {
-        newStatusArray.push({
-          id: item,
-          postText: statusItems[item].postText,
-          imageUrl: statusItems[item].imageUrl,
-          profileImageUrl: statusItems[item].profileImageUrl,
-          timestamp: this.convertTimestamp(statusItems[item].timestamp),
-          username: statusItems[item].username,
-          postId: statusItems[item].postId,
-        });
-      } 
-
-      this.setState({
-        //Reverse so newst post is on top
-        statusArray: newStatusArray.reverse()
-      })
+    this.setState({
+      //Reverse so newst post is on top
+      statusArray: responseArray.reverse()
     })
-  }
-
-  convertTimestamp = (timestamp) =>{
-    let date = new Date(timestamp)
-
-    let timeString = (date.getHours() + ":" + 
-                      date.getMinutes() + " " + 
-                      date.getDate() + "/"+ 
-                      date.getMonth() + "/" + 
-                      date.getFullYear()).toString()
-
-    return timeString
   }
 
 
@@ -105,7 +74,8 @@ class HomeScreen extends React.Component {
     return this.state.statusArray.map((value,index) => {
       return(        
         <CustomCard 
-        key={index} 
+        key={index}
+        postObject={value} 
         username={value.username} 
         timestamp={value.timestamp} 
         imageUrl={value.imageUrl} 
@@ -130,5 +100,3 @@ class HomeScreen extends React.Component {
   }
 }
 
-
-export default HomeScreen;

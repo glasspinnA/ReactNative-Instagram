@@ -42,9 +42,10 @@ const CommentStack = createStackNavigator({
 const TabStack = createBottomTabNavigator(
   {
   Home: {screen: HomeStack},
-  Like: {screen: LikeStack},
+  //Like: {screen: LikeStack},
   PostTab:{screen: PostTabStack},
   Profile: {screen: ProfileStack},
+
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -70,8 +71,11 @@ const TabStack = createBottomTabNavigator(
 export default createAppContainer(createSwitchNavigator(
   {
     AuthLoading: LoadingScreen,
+    
     AuthRoute: AuthProcessStack,
+    
     Tabs: TabStack,
+    
   },
   {
     initialRouteName: 'AuthLoading',

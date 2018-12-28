@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet,Dimensions } from 'react-native';
-import firebase from './../../src/fire'
+import Fire from './../../src/Fire'
 import { Container, Button, Item, Input, Icon, Content } from 'native-base';
 import uuid from 'uuid';
 import {ImagePicker, Permissions} from 'expo'
@@ -14,23 +14,29 @@ import {ImagePicker, Permissions} from 'expo'
 export default class PostTabScreen extends Component {
   constructor(props) {
     super(props);
+    
     this.state = {
       selectedPhoto: {},
       isPhotoSelected: false,
-      userUsername: '',
-      userProfileImage: '',
       postText: '',
-    };
+      userObject: {},
+    }
+
   }
 
   async componentDidMount(){
     this.props.navigation.setParams({ cameraSelect: this._cameraSelect, imageSelect: this._imageSelect });
 
-    await this.getCurrentUserId()
-    this.getCurrentUsername()
-    
+    await this.getUserInfo()
+
     await Permissions.askAsync(Permissions.CAMERA_ROLL);
     await Permissions.askAsync(Permissions.CAMERA);
+  }
+
+  getUserInfo = async() => {
+    this.setState({
+      userObject: await Fire.shared.getUser(),
+    })
   }
 
   
@@ -53,7 +59,7 @@ export default class PostTabScreen extends Component {
     }
   }
 
-
+/*
   getCurrentUserId = () => {
     let user = firebase.auth().currentUser
 
@@ -79,17 +85,59 @@ export default class PostTabScreen extends Component {
 
     }))
   }
-
+*/
 
   uploadImage = async () => {
     let selectedPicture = this.state.selectedPhoto
+    let resObj = await Fire.shared.getUser()
+    console.log("UPLOAD_FUN 1 " + resObj[0].uid);
+    
+    if(this.state.isPhotoSelected){
+      try{
+
+        if(!selectedPicture.cancelled){
+          uploadUrl = await Fire.shared.uploadImageAsync(selectedPicture.uri,resObj[0].uid,true);
+
+          if(this.state.postText.length > 1){
+            Fire.shared.uploadImageToDB(uploadUrl, this.state.postText, resObj)
+          }else{
+            console.log('TOO SHORT TEXT');
+          }
+
+        }else{
+          console.log("PHOTO CANCALLED");
+        }
+
+      }catch(error){
+        alert("Problem with uploading")
+        console.log(error);
+      }
+    }else{
+      console.log('NO PHOTO SELECTED');
+    }
+  }
+    
+    
+/*
     if(this.state.isPhotoSelected){
       try {
         if (!selectedPicture.cancelled) {
-          uploadUrl = await uploadImageAsync(selectedPicture.uri);
+          uploadUrl = await Fire.shared.uploadImageAsync(selectedPicture.uri);
 
           if(this.state.postText.length > 1){
+              console.log("UPLOAD_FUN " + resObj);
 
+              Fire.shared.uploadImageToDB(uploadUrl, this.state.postText, resObj)
+              
+              .then(() => {
+                this.setState({
+                  isPhotoSelected: false,
+                })
+              })
+              */
+            
+
+            /*
             firebase.database().ref('user-posts/').child(this.state.currentUserId).push({
               uid: this.state.currentUserId,
               imageUrl: uploadUrl,
@@ -111,6 +159,7 @@ export default class PostTabScreen extends Component {
                 isPhotoSelected: false,
               })
             })
+            
             .catch((error) => {
               alert(error)
             })
@@ -125,8 +174,10 @@ export default class PostTabScreen extends Component {
         alert('Upload failed, sorry :(');
       }
     }
+    
   }
-  
+  */
+
   _imageSelect = async () => {
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
@@ -192,42 +243,3 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 })
-
-
-
-async function uploadImageAsync(uri) {
-  // Why are we using XMLHttpRequest? See:
-  // https://github.com/expo/expo/issues/2402#issuecomment-443726662
-  const blob = await urlToBlob(uri)
-
-  const ref = firebase
-    .storage()
-    .ref('posts/')
-    .child(uuid.v4());
-  const snapshot = await ref.put(blob);
-
-  // We're done with the blob, close and release it
-  blob.close();
-
-  return await snapshot.ref.getDownloadURL();
-}
-
-
-function urlToBlob(url) {
-  return new Promise((resolve, reject) => {
-    
-    var xhr = new XMLHttpRequest();
-    xhr.onerror = reject;
-    
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === 4) {
-        resolve(xhr.response);
-      }
-    };
-
-    xhr.open('GET', url);
-    xhr.responseType = 'blob'; // convert type
-    
-    xhr.send();
-  })
-}

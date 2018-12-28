@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {Button, Header, Body, Container, Content, Input, Item,Form} from 'native-base'
-import firebase from '../../src/fire'
+import Fire from '../../src/Fire'
 import { LinearGradient } from 'expo';
 
 class SignInScreen extends Component {
@@ -12,8 +12,8 @@ class SignInScreen extends Component {
       email: '',
       password: '',
     }
+
   }
-  
   
   static navigationOptions = {
     title: 'Log in',
@@ -24,14 +24,10 @@ class SignInScreen extends Component {
     let userPassword = this.state.password
 
     if (userEmail != '' && userPassword != ''){
-      firebase.auth().signInWithEmailAndPassword(userEmail,userPassword)
-      .catch((error) => {
-        alert(error);
-      })
+      Fire.shared.login(userEmail,userPassword)
     }else{
       alert("Email or password is empty")
     }
-  
   }
 
   render() {
