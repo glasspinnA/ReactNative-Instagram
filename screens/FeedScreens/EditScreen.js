@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import Fire from '../../src/Fire'
-import { Item, Input, Button, Container, Content, Right, Body } from 'native-base';
+import { Item, Input, Button, Body } from 'native-base';
 
 export default class EditScreen extends Component {
   constructor(props) {
@@ -25,7 +25,10 @@ export default class EditScreen extends Component {
     };
   };
 
-  
+  /**
+   * Middleware function for passing text about the user to the function which uploads the 
+   * information on firebase
+   */
   updateUserInfo = () =>{    
     const uid = this.props.navigation.getParam('uid', 'NO-ID');
 

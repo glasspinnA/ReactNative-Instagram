@@ -40,8 +40,8 @@ class CustomCard extends React.Component {
             </Button>
           </Left>
         </CardItem>
-        <CardItem style={{height: 3 }}>
-            <Text>Number of Likes</Text>
+        <CardItem style={{height: 2 }}>
+            <Text>{this.props.postObject.timestamp}</Text>
         </CardItem>
         <CardItem>
           <Body>

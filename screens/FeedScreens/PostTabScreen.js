@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet,Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet,} from 'react-native';
 import Fire from '../../src/Fire'
-import { Container, Button, Item, Input, Icon, Content } from 'native-base';
-import uuid from 'uuid';
+import {Button, Item, Input, Icon, Body } from 'native-base';
 import {ImagePicker, Permissions} from 'expo'
-
-
-/*
-* TODO:
-* Fix better UI 
-*/ 
 
 export default class PostTabScreen extends Component {
   constructor(props) {
@@ -33,12 +26,6 @@ export default class PostTabScreen extends Component {
     await Permissions.askAsync(Permissions.CAMERA);
   }
 
-  getUserInfo = async() => {
-    this.setState({
-      userObject: await Fire.shared.getUser(),
-    })
-  }
-
   
   static navigationOptions = ({navigation}) => {
     const { params = {} } = navigation.state;
@@ -59,38 +46,15 @@ export default class PostTabScreen extends Component {
     }
   }
 
-/*
-  getCurrentUserId = () => {
-    let user = firebase.auth().currentUser
-
-    if(user){
-      this.setState({
-        currentUserId: firebase.auth().currentUser.uid
-      })
-    }else{
-      console.log("No logged in user");
-    }
+  getUserInfo = async() => {
+    this.setState({
+      userObject: await Fire.shared.getUser()
+    })
   }
-
-  getCurrentUsername = () => {
-    var ref = firebase.database().ref('users/').child(this.state.currentUserId)
-    ref.once("value", (snapshot => {
-      let responseObject = snapshot.val();
-      
-      this.setState({
-        userUsername: responseObject.username,
-        userProfileImage: responseObject.imageUrl
-      })
-      
-
-    }))
-  }
-*/
 
   uploadImage = async () => {
     let selectedPicture = this.state.selectedPhoto
     let resObj = await Fire.shared.getUser()
-    console.log("UPLOAD_FUN 1 " + resObj[0].uid);
     
     if(this.state.isPhotoSelected){
       try{
@@ -117,67 +81,30 @@ export default class PostTabScreen extends Component {
     }
   }
     
-    
-/*
-    if(this.state.isPhotoSelected){
-      try {
-        if (!selectedPicture.cancelled) {
-          uploadUrl = await Fire.shared.uploadImageAsync(selectedPicture.uri);
 
-          if(this.state.postText.length > 1){
-              console.log("UPLOAD_FUN " + resObj);
-
-              Fire.shared.uploadImageToDB(uploadUrl, this.state.postText, resObj)
-              
-              .then(() => {
-                this.setState({
-                  isPhotoSelected: false,
-                })
-              })
-              */
-            
-
-            /*
-            firebase.database().ref('user-posts/').child(this.state.currentUserId).push({
-              uid: this.state.currentUserId,
-              imageUrl: uploadUrl,
-              timestamp: new Date().getTime(),
-            })
-
-
-            firebase.database().ref('posts/').child(uuid.v4()).set({
-              uid: this.state.currentUserId,
-              timestamp: new Date().getTime(),
-              imageUrl: uploadUrl,
-              postText: this.state.postText,
-              username: this.state.userUsername,
-              profileImageUrl: this.state.userProfileImage,
-              postId: uuid.v4(),
-            })
-            .then(() => {
-              this.setState({
-                isPhotoSelected: false,
-              })
-            })
-            
-            .catch((error) => {
-              alert(error)
-            })
-
-          }else{
-            alert("Enter a text")
-          }
-
-        }
-      } catch (e) {
-        console.log(e);
-        alert('Upload failed, sorry :(');
-      }
+  selectPhoto = async (isCameraSelected) =>{
+    let pickerResult
+    if(isCameraSelected){
+      pickerResult = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.3
+      });
+    }else{
+      pickerResult = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.3,
+      });
     }
-    
-  }
-  */
 
+    this.setState({
+      selectedPhoto: pickerResult,
+      isPhotoSelected: true,
+    })
+
+  }
+ 
   _imageSelect = async () => {
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
@@ -210,36 +137,53 @@ export default class PostTabScreen extends Component {
 
   render() {
     return (
-      <Container>
-        <Content>
-          <Image source={{uri: this.state.selectedPhoto.uri}} resizeMode='cover' style={styles.imageBox}/>
-          <Item>
-            <Input 
-              placeholder={'Enter your text'} 
-              onChangeText={(postTextInput) => this.setState({postText: postTextInput})} />
-          </Item>
-          
-        <View>
-          <Button light rounded onPress={() => this.uploadImage()} style={styles.customButton}>
-            <Text>Upload</Text>
-          </Button>
+      
+      <View style={styles.container}>
+        <View style={styles.childrenBox}>
+          <Image style={styles.imageBox} source={{uri: this.state.selectedPhoto.uri}} resizeMode='cover' />
         </View>
-        </Content>
-      </Container>
+        <View style={styles.childrenBox}>
+          <View style={{flexDirection:'row'}}>
+            <Body>
+              <Item rounded>
+                <Input 
+                  placeholder={'Enter your text'} 
+                  onChangeText={(postTextInput) => this.setState({postText: postTextInput})} />
+              </Item>
+            </Body>
+            <Button light rounded onPress={() => this.uploadImage()}  style={styles.customButton}>
+              <Text>Upload</Text>
+            </Button>
+          </View>
+        </View>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection:'column',
+    justifyContent:'space-between',
+    alignItems: 'center',
+    alignContent: 'center',
+    flex:1,    
+  },
+  childrenBox:{
+    alignItems: 'center',
+    alignContent: 'center',
+    width:'100%',
+    margin: 10,
+  },
   customButton:{
     padding:20,
   },
   imageBox:{
-    height:350, 
-    width:350,
-    flex:1,
+    height:250, 
+    width:250,
     borderColor: 'black',
     borderWidth: 2,
+    alignItems:'center',
     borderRadius: 20,
   },
 })

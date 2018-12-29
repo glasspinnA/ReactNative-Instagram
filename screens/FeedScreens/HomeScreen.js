@@ -35,7 +35,7 @@ export default class HomeScreen extends React.Component {
       headerTitle: 'Instagram',
       headerLeft: (
         <Button transparent onPress={() => params.logout()}>
-          <Icon name='ios-camera' style={{paddingTop:10, paddingLeft:10, color:'black'}} />
+          <Icon name='md-log-out' style={{paddingTop:10, paddingLeft:10, color:'black'}} />
         </Button>
       ),
       headerRight: (
@@ -66,22 +66,28 @@ export default class HomeScreen extends React.Component {
     })
   }
 
+  shouldComponentUpdate(){
+    console.log("Should update");
+    return true
+  }
+
+  componentDidUpdate(){
+    console.log("Component did update");
+  
+  }
+
 
   /*
   * Method for rendering each fetched post
   */
   renderPosts = () => {
+    console.log(this.state.statusArray);
     return this.state.statusArray.map((value,index) => {
+      
       return(        
         <CustomCard 
         key={index}
-        postObject={value} 
-        username={value.username} 
-        timestamp={value.timestamp} 
-        imageUrl={value.imageUrl} 
-        postText={value.postText}
-        profileImageUrl={value.profileImageUrl}
-        postId={value.postId}
+        postObject={value}
         />
       )        
     })
