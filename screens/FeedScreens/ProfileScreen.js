@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
-import {  View, Text, StyleSheet, Image,Dimensions  } from 'react-native';
+import {  View, Text, StyleSheet, Image,Dimensions, RefreshControl  } from 'react-native';
 import { Container, Content, Thumbnail, Button,Icon} from 'native-base';
 import Fire from '../../src/Fire'
-
-
 
 class ProfileScreen extends PureComponent {
     constructor(props){
@@ -12,6 +10,7 @@ class ProfileScreen extends PureComponent {
             activeIndex: 0,
             imageArray: [],
             userArray:{},
+            refreshing: false,
         }
 
     }
@@ -90,10 +89,25 @@ class ProfileScreen extends PureComponent {
         }
     }
 
+    
+  /**
+   * Function for refreshing page
+   */
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    
+
+    this.fetchUserPosts(this.state.userArray.uid)
+    .then(() => {
+      this.setState({refreshing: false});
+    });
+  }
+
   render() {
     return (
     <Container>
-        <Content>
+        <Content refreshControl= {
+          <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} title="Loading" />}>
             <View>
                 <View style={{flexDirection: 'row'}}>
 

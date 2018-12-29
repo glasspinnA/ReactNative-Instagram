@@ -12,6 +12,7 @@ class CommentScreen extends Component {
             postId: '',
             post:{},
             commentArray: [],
+            refreshing: false
         };
     }
 
@@ -34,19 +35,36 @@ class CommentScreen extends Component {
         this.fetchComments(postObject.postId)
     }
 
+    /**
+     * Function for fetching comments
+     */
+
     fetchComments = async (postId) =>{
+        this.setState({refreshing: true});
+
         let responseArray = await Fire.shared.fetchComments(postId)
-        
+
         this.setState({
-            commentArray: responseArray.reverse()
-        })
+            commentArray: responseArray.reverse(),
+            refreshing:false,
+        })        
     }
 
 
+    /**
+     * Function for posting comment
+     */
     postComment = () =>{
         const commentText = this.state.commentText
         if(commentText.length > 0){
             Fire.shared.postComment(this.state.post.id,commentText)
+            .then(() => {
+                this.fetchComments(this.state.post.postId)
+                this.setState({commentText: ''})
+            })
+            .catch((error) => {
+                alert(error)
+            })
         }
     }
 
@@ -84,6 +102,7 @@ class CommentScreen extends Component {
                     <Body>
                         <Item rounded>
                             <Input 
+                                value={this.state.commentText}
                                 placeholder="Enter your comment" 
                                 onChangeText={(commentInput) => 
                                     this.setState({commentText: commentInput})

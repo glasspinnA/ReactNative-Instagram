@@ -60,16 +60,18 @@ export default class PostTabScreen extends Component {
       try{
 
         if(!selectedPicture.cancelled){
-          uploadUrl = await Fire.shared.uploadImageAsync(selectedPicture.uri,resObj[0].uid,true);
+          uploadUrl = await Fire.shared.uploadImageAsync(selectedPicture.uri,resObj[0].uid,true)
 
           if(this.state.postText.length > 1){
             Fire.shared.uploadImageToDB(uploadUrl, this.state.postText, resObj)
+            
+            this.setState({postText:'', selectedPhoto:{} })
           }else{
-            console.log('TOO SHORT TEXT');
+            alert('TOO SHORT TEXT');
           }
 
         }else{
-          console.log("PHOTO CANCALLED");
+          alert("PHOTO CANCALLED");
         }
 
       }catch(error){
@@ -77,7 +79,7 @@ export default class PostTabScreen extends Component {
         console.log(error);
       }
     }else{
-      console.log('NO PHOTO SELECTED');
+      alert('NO PHOTO SELECTED');
     }
   }
     
@@ -147,6 +149,7 @@ export default class PostTabScreen extends Component {
             <Body>
               <Item rounded>
                 <Input 
+                  value={this.state.postText}
                   placeholder={'Enter your text'} 
                   onChangeText={(postTextInput) => this.setState({postText: postTextInput})} />
               </Item>
