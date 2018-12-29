@@ -1,5 +1,6 @@
-import React, { Alert, Component } from "react";
-import { View,Text,Button,Icon, Container,Content } from 'native-base'
+import React, { Alert, Component, } from "react";
+import {View,Text,Button,Icon, Container,Content, } from 'native-base'
+import {RefreshControl} from 'react-native'
 
 import CustomCard from '../customCard'
 import StoriesTab from "../StoriesTab";
@@ -12,13 +13,14 @@ import Fire from "../../src/Fire";
 * Be a to like a post
 */
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
 
   constructor(props){
     super(props)
 
     this.state = {
       statusArray: [],
+      refreshing: false,
     }
 
   }
@@ -92,17 +94,32 @@ export default class HomeScreen extends React.Component {
       )        
     })
   }
+
+  /**
+   * Function for refreshing page
+   */
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    
+    this.fetchFromDB().then(() => {
+      this.setState({refreshing: false});
+    });
+  }
     
 
   render() {
     return (
       <Container>        
-        <Content>
-          <StoriesTab />
-            {this.renderPosts()}            
+        <Content refreshControl= {
+          <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} title="Loading" />}
+        >
+          {this.renderPosts()}            
         </Content>
       </Container>
     );
   }
 }
+
+
+export default HomeScreen
 
