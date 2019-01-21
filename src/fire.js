@@ -76,6 +76,7 @@ class Fire{
     
     await firebase.database().ref('user-posts/')
     .child(uid)
+    .orderByChild('timestamp')
     .once('value',snapshot =>{
         let statusItems = snapshot.val();
 
@@ -250,19 +251,21 @@ uploadImageAsync = async(uri,userId,isUploadingPost) => {
 
   uploadImageToDB = (url, statusText, userObject) => {
 
-    const postId = uuid.v4()
+    const timestamp = new Date().getTime()
 
-    firebase.database().ref('posts/').child(postId).set({
-      timestamp: new Date().getTime(),
+    let ref = firebase.database().ref('posts/').push()
+    ref.set({
+      timestamp: timestamp,
       imageUrl: url,
       postText: statusText,
-      postId: postId,
+      postId: ref.key,
       uid: userObject[0].uid,
       username: userObject[0].username,
       userProfileUrl: userObject[0].imageUrl,
     })
 
     firebase.database().ref('user-posts/').child(userObject[0].uid).push({
+      timestamp: timestamp,
       imageUrl: url,
     })
   }  

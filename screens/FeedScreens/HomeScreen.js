@@ -109,7 +109,8 @@ class HomeScreen extends React.Component {
 
   render() {
     return (
-      <Container>        
+      <Container>  
+        <StoriesTab />      
         <Content refreshControl= {
           <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} title="Loading" />}
         >
